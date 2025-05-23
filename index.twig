@@ -1,0 +1,100 @@
+{% import "/block/base.twig" as base %}
+
+{% set filtro_nick = filtro.nick_militar | default('') %}
+{% set filtro_meio = filtro.meio_contato | default('todos') %}
+
+{# Begin Filtro #}
+<div class="ui segment">
+    <label for="filtro_nick" class="ui black label" style="width: 100%; padding: 15px; margin-top: 1em;">
+        <i class="filter icon"></i> FILTRO DE CONTATOS
+    </label>
+
+    <form method="GET" class="ui form">
+        <div class="ui stackable grid">
+            <div class="eight wide column">
+                <div class="field">
+                    <label for="filtro_nick">Nick do Militar</label>
+                    <input
+                        type="text"
+                        id="filtro_nick"
+                        name="filtro[nick_militar]"
+                        placeholder="Digite o nickname do militar"
+                        value="{{ filtro_nick }}"
+                        autocomplete="off"
+                        style="font-size: 1.1em; padding: 0.75em;"
+                    />
+                </div>
+            </div>
+
+            <div class="eight wide column">
+                <div class="field">
+                    <label for="filtro_meio">Meio de Contato</label>
+                    <select
+                        id="filtro_meio"
+                        name="filtro[meio_contato]"
+                        class="ui fluid dropdown selection"
+                        style="font-size: 1.1em; padding: 0.75em;"
+                    >
+                        <option value="todos" {{ filtro_meio == 'todos' ? 'selected' : '' }}>Todos</option>
+                        <option value="whatsapp" {{ filtro_meio == 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
+                        <option value="discord" {{ filtro_meio == 'discord' ? 'selected' : '' }}>Discord</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sixteen wide column">
+                <button type="submit" class="ui black button" style="width: 100%; padding: 10px; margin-top: 1em;">
+                    <i class="filter icon"></i> FILTRAR
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{# End Filtro #}
+
+{{ base.header('Lista de Contatos', 'list') }}
+
+{# Begin Lista #}
+<table class="ui table">
+    {{ thead("ID", "Aplicador", "Nick do Militar", "WhatsApp", "Discord", "Data", "Status", "Ações") }}
+
+    {% if lista|length > 0 %}
+        {% for item in lista %}
+            <tr>
+                {{ td(item.id) }}
+                {{ td(item.aplicador) }}
+                {{ td(item.nick_militar ?: '-') }}
+                {{ td(item.contato_whatsapp ?: '-') }}
+                {{ td(item.contato_discord ?: '-') }}
+                {{ td(item.data ? item.data|date("d/m/Y") : "-") }}
+                {{ td(base.status(item.status)) }}
+
+                <td>
+                    <div class="ui blue buttons">
+                        <a class="ui button" href="{{ link ~ '/ver/' ~ item.id }}">
+                            Ver
+                        </a>
+                        <div class="ui floating dropdown icon button">
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a class="item" href="{{ link ~ '/editar/' ~ item.id }}">
+                                    <i class="edit icon"></i> Editar
+                                </a>
+                                <a class="item" href="{{ link ~ '/apagar/' ~ item.id }}">
+                                    <i class="delete icon"></i> Apagar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td class="text-center" colspan="8">
+                Nenhum resultado encontrado
+            </td>
+        </tr>
+    {% endif %}
+</table>
+{# End Lista #}
