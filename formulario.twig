@@ -1,0 +1,99 @@
+{% import "/block/base.twig" as base %}
+
+<div class="ui raised very padded segment">
+    <h3 class="ui dividing header" style="color: #3b3b3b; font-weight: 600;">
+        <i class="address book icon"></i>
+        Contato do Militar
+    </h3>
+
+    <div class="two fields">
+        <div class="field">
+            <label for="meio_contato" class="ui purple ribbon label" style="font-size: 1.05em; width: 100%;">
+                <i class="paper plane outline icon"></i>
+                MEIO DE CONTATO
+            </label>
+            <div class="ui pointing below small label" style="font-size: 0.75em; color: #6c757d; margin-bottom: 0.5em;">
+                <i class="info circle icon"></i> Selecione o canal oficial pelo qual o contato será realizado.
+            </div>
+            <div class="ui fluid selection dropdown {{ disabled ? 'disabled' }}">
+                <input type="hidden" name="meio_contato" value="{{ item.meio_contato ?? '' }}">
+                <i class="dropdown icon"></i>
+                <div class="default text">Selecione o meio de contato</div>
+                <div class="menu">
+                    <div class="item" data-value="whatsapp">
+                        <i class="whatsapp icon"></i> WhatsApp
+                    </div>
+                    <div class="item" data-value="discord">
+                        <i class="discord icon"></i> Discord
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% set contato_label = 'Contato' %}
+        {% set contato_placeholder = 'Digite o contato' %}
+        {% if item.meio_contato == 'whatsapp' %}
+            {% set contato_label = 'Número de WhatsApp' %}
+            {% set contato_placeholder = 'Ex: +55 11 91234-5678' %}
+        {% elseif item.meio_contato == 'discord' %}
+            {% set contato_label = 'Usuário do Discord' %}
+            {% set contato_placeholder = 'Ex: nick#1234' %}
+        {% elseif item.meio_contato == 'email' %}
+            {% set contato_label = 'Endereço de Email' %}
+            {% set contato_placeholder = 'Ex: militar@exemplo.com' %}
+        {% endif %}
+
+        <div class="field">
+            <label for="contato_pessoa" class="ui violet ribbon label" style="font-size: 1.05em; width: 100%;">
+                <i class="address card outline icon"></i>
+                {{ contato_label|upper }}
+            </label>
+            <div class="ui pointing below small label" style="font-size: 0.75em; color: #6c757d; margin-bottom: 0.5em;">
+                <i class="info circle icon"></i> Informe o {{ contato_label|lower }} corretamente para garantir comunicação precisa.
+            </div>
+            {{ base.input({
+                name: "contato_pessoa",
+                placeholder: contato_placeholder,
+                type: "text",
+                value: item.contato_pessoa ?? "",
+                disabled
+            }) }}
+        </div>
+    </div>
+
+    <div class="two fields">
+        <div class="field">
+            <label for="nick_militar" class="ui blue ribbon label" style="font-size: 1.05em; width: 100%;">
+                <i class="user secret icon"></i>
+                NICKNAME DO MILITAR
+            </label>
+            <div class="ui pointing below small label" style="font-size: 0.75em; color: #6c757d; margin-bottom: 0.5em;">
+                <i class="info circle icon"></i> Informe o nickname utilizado pelo militar.
+            </div>
+            {{ base.input({
+                name: "nick_militar",
+                placeholder: "Digite o nickname do militar",
+                type: "text",
+                value: item.nick_militar ?? "",
+                disabled
+            }) }}
+        </div>
+
+        <div class="field">
+            <label for="nick_responsavel" class="ui teal ribbon label" style="font-size: 1.05em; width: 100%;">
+                <i class="shield alternate icon"></i>
+                RESPONSÁVEL PELO CONTATO
+            </label>
+            <div class="ui pointing below small label" style="font-size: 0.75em; color: #6c757d; margin-bottom: 0.5em;">
+                <i class="info circle icon"></i> Informe o nickname da pessoa responsável por este contato.
+            </div>
+            {{ base.input({
+                name: "nick_responsavel",
+                placeholder: "Digite o nickname do responsável",
+                type: "text",
+                value: item.nick_responsavel ?? "",
+                disabled
+            }) }}
+        </div>
+    </div>
+</div>
